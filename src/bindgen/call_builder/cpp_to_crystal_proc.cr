@@ -41,11 +41,11 @@ module Bindgen
 
           lambda_args = formatter.argument_list(call.arguments)
           pass_args = call.arguments.map(&.call).join(", ")
-          inner = %[#{call.name}(#{pass_args})]
+          inner = %[(*#{call.name})(#{pass_args})]
 
           prefix = "return " unless call.result.type.pure_void?
 
-          "[#{call.name}](#{lambda_args}){ #{prefix}#{inner}; }"
+          "[#{call.name} = std::unique_ptr<decltype(#{call.name})>(new (NoGC) decltype(#{call.name})(#{call.name}))](#{lambda_args}){ #{prefix}#{inner}; }"
         end
       end
     end
