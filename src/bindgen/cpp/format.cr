@@ -3,14 +3,14 @@ module Bindgen
     # Formatter for C++ style code.
     struct Format
       # Formats *arg* as `type name`
-      def argument(arg : Call::Argument, idx) : String
+      def argument(arg : Call::Argument, idx, *, wrap = false) : String
         typer = Typename.new
-        "#{typer.full arg} #{Argument.name(arg, idx)}"
+        "#{typer.full(arg, wrap: wrap)} #{Argument.name(arg, idx)}"
       end
 
       # Formats *arguments* as `type name, ...`
-      def argument_list(arguments : Enumerable(Call::Argument)) : String
-        arguments.map_with_index { |arg, idx| argument(arg, idx) }.join(", ")
+      def argument_list(arguments : Enumerable(Call::Argument), *, wrap = false) : String
+        arguments.map_with_index { |arg, idx| argument(arg, idx, wrap: wrap) }.join(", ")
       end
 
       # Returns a C++ function pointer type, matching *method*.

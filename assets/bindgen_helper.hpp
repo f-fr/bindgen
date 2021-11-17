@@ -104,10 +104,23 @@ struct CrystalProc {
   }
 };
 
+/// Type trait for identifying managed and non-managed objects.
+///
+/// Specializations of this trait can be used to induce custom
+/// code when creating and referencing wrapped objects.
+template <typename T, typename Enable = void> struct bg_type;
+
 template <typename T>
 struct CrystalGCWrapper: public T, public gc_cleanup
 {
   using T::T;
+};
+
+/// By default types are not wrapped.
+template <typename T, typename Enable>
+struct bg_type {
+  typedef T type;
+  static constexpr bool wrap = false;
 };
 
 /// A simple wrapper around a non-pointer type that allows a single

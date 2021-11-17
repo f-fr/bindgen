@@ -35,8 +35,8 @@ module Bindgen
         def to_code(call : Call, platform : Graph::Platform) : String
           formatter = Cpp::Format.new
           typer = Cpp::Typename.new
-          func_result = typer.full(call.result)
-          func_args = formatter.argument_list(call.arguments)
+          func_result = typer.full(call.result, wrap: true)
+          func_args = formatter.argument_list(call.arguments, wrap: true)
 
           # Returning a `void` from a void method generates a warning.
           prefix = "return " unless call.result.type.pure_void?
